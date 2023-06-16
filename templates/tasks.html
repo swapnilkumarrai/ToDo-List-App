@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <style>
+    thead th {
+      background-color: #ADD8E6;
+      /* Set the background color of the table heading block */
+      color: red;
+      /* Set the text color of the table heading block */
+      font-weight: bold;
+      /* Make the heading text bold */
+    }
+  </style>
+  <!--DataTables css-->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
+  <style>
+    .sorting:before,
+    .sorting:after,
+    .sorting_asc:before,
+    .sorting_asc:after,
+    .sorting_desc:before,
+    .sorting_desc:after,
+    .sorting_asc_disabled:before,
+    .sorting_asc_disabled:after,
+    .sorting_desc_disabled:before,
+    .sorting_desc_disabled:after {
+      color: #000000;
+      /* Set the color of the sort arrows to black */
+    }
+
+      {
+      % comment %
+    }
+
+    .form-control {
+      margin: 5px;
+      border-color: #555555;
+    }
+
+      {
+      % endcomment %
+    }
+
+    .task-cell * {
+      margin: 5px;
+    }
+  </style>
+  {% comment %} Added css to change background color {% endcomment %}
+  <style>
+    /* Define your light theme styles */
+    .light-theme {
+      background-color: white;
+      color: black;
+    }
+
+    /* Define your dark theme styles */
+    .dark-theme {
+      background-color: black;
+      color: white;
+    }
+  </style>
+  {% comment %} Added css for adding gradient color in background {% endcomment %}
+  <style>
+    /* Define gradient themes */
+    body {
+        {
+        % comment %
+      }
+
+      height: 100vh;
+
+        {
+        % endcomment %
+      }
+
+      margin: 0;
+
+        {
+        % comment %
+      }
+
+      display: flex;
+
+        {
+        % endcomment %
+      }
+
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradientAnimation 15s ease infinite;
+    }
+
+    /* Blue-Purple gradient */
+    body.blue-purple {
+      background: linear-gradient(45deg, #4B8AC3, #9966CC);
+    }
+
+    /* Purple-Pink gradient */
+    body.purple-pink {
+      background: linear-gradient(45deg, #B967FF, #FF6EC4);
+    }
+
+    /* Orange-Yellow gradient */
+    body.orange-yellow {
+      background: linear-gradient(45deg, #FF8C00, #FFEF19);
+    }
+
+    /* Green-Blue gradient */
+    body.green-blue {
+      background: linear-gradient(45deg, #00FFC0, #0080FF);
+    }
+
+    /* Animation for gradient transition */
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  </style>
+
+  <style>
+    .title {
+      font-family: 'Arial Black', sans-serif;
+      font-size: 3em;
+      color: #000000;
+      text-transform: uppercase;
+      text-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .title:hover {
+      transform: rotate(10deg);
+    }
+  </style>
+
+
+  <title>Tasks - ToDos Lists</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">ToDo</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/tasks">Tasks</a>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+  <button id="themeButton"
+    style="margin-top: 20px; margin-left: 10px; border-radius: 50px; background-color: #FF1493;">Change Text
+    Theme</button>
+
+
+  {% if deleted_success %}
+  <div id="alertDiv1" class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>DELETED!</strong> Your task has been deleted from the list.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %}
+
+  {% if updated_success %}
+  <div id="alertDiv2" class="alert alert-primary alert-dismissible fade show" role="alert">
+    <strong>UPDATED!</strong> Your task has been updated in the list.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %}
+
+  <div class="container my-3">
+    <h2 class="title text-center py-3">ToDo List - All Tasks</h2>
+    <table class="table table-bordered" id="table" style="text-align: center;">
+      <thead>
+        <tr>
+          <th scope="col" class="table-heading text-center">#</th>
+          <th scope="col" class="table-heading text-center">Task Title</th>
+          <th scope="col" class="table-heading text-center">Task Description</th>
+          <th scope="col" class="table-heading text-center">Actions</th> <!-- New column for the delete and update button -->
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+        <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{ task.taskTitle }}</td>
+          <td>{{ task.taskDesc }}</td>
+          <td class="task-cell">
+            <div style='display: flex; gap: 10px; justify-content: center;'>
+              <form action="/tasks/UpdateTask" method="POST">
+                <!-- Submit button as the update button -->
+                {% csrf_token %}
+                <input type="hidden" name="updateTaskId" value="{{ task.taskId }}">
+                <!-- Hidden input field to store the task ID -->
+                <button class="btn"
+                  style="background-color: blue; font-size: 10px; padding: 2px 5px; border-radius: 8px;" type="submit">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" aria-hidden="true" width="24" height="24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10">
+                    </path>
+                  </svg>
+                </button>
+              </form>
+              <form action="/tasks" method="POST">
+                <!-- Submit button as the delete button -->
+                {% csrf_token %}
+                <input type="hidden" name="deleteTaskId" value="{{ task.taskId }}">
+                <!-- Hidden input field to store the task ID -->
+                <button class="btn _delete_1cu1f_81" type="submit"
+                  style="background-color: red; font-size: 10px; padding: 2px 5px; border-radius: 8px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" aria-hidden="true" width="24" height="24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0">
+                    </path>
+                  </svg>
+                </button>
+              </form>
+            </div>
+
+            <!-- Example single button -->
+            {% if task.taskStatus == 0 %}
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                aria-haspopup="true" style="border-radius: 8px;" aria-expanded="false">NOT STARTED</button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/tasks?status=1&Id={{ task.taskId }}">IN PROGRESS</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/tasks?status=2&Id={{ task.taskId }}">COMPLETED</a>
+              </div>
+            </div>
+            {% elif task.taskStatus == 1 %}
+            <div class="btn-group">
+              <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
+                style="border-radius: 8px;" aria-haspopup="true" aria-expanded="false">IN PROGRESS</button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/tasks?status=0&Id={{ task.taskId }}">NOT STARTED</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/tasks?status=2&Id={{ task.taskId }}">COMPLETED</a>
+              </div>
+            </div>
+            {% else %}
+            <div class="btn-group">
+              <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                style="border-radius: 8px;" aria-haspopup="true" aria-expanded="false">COMPLETED</button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/tasks?status=0&Id={{ task.taskId }}">NOT STARTED</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/tasks?status=1&Id={{ task.taskId }}">IN PROGRESS</a>
+              </div>
+            </div>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+
+
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="container py-4" style="display: flex; justify-content: center; margin-top: 140px;">
+    <p class="text-center bg-dark text-light">
+      Copyright &copy; 2023 | All rights reserved
+    </p>
+  </footer>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <!--DataTables js-->
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+    // Set the duration (in milliseconds) for the alert to be displayed
+    var duration = 10000; // 10 seconds
+
+    // Function to hide the alert after the specified duration
+    setTimeout(function () {
+      var alertDiv1 = document.getElementById('alertDiv1');
+      var alertDiv2 = document.getElementById('alertDiv2');
+      if (alertDiv1) {
+        alertDiv1.style.display = 'none';
+      }
+      if (alertDiv2) {
+        alertDiv2.style.display = 'none';
+      }
+    }, duration);
+  </script>
+
+  <!-- DataTable script -->
+  <script>
+    $("#table").DataTable({
+      // DataTables configuration
+      paging: true, // Pagination
+      pageLength: 10, // Data per usage
+      lengthChange: true, // Show entries per page
+      autoWidth: true, // Control the auto width on columns
+      searching: true, // Input search
+      bInfo: true, // Info on footer
+      bSort: true //Filter A to Z and Z to A (and numbers) 
+    })
+  </script>
+  {% comment %} Added script to change backgrount theme {% endcomment %}
+  <script>
+    // Get a reference to the button element
+    var themeButton = document.getElementById("themeButton");
+
+    // Add a click event listener to the button
+    themeButton.addEventListener("click", function () {
+      // Get a reference to the body element
+      var body = document.body;
+
+      // Toggle the theme classes
+      body.classList.toggle("light-theme");
+      body.classList.toggle("dark-theme");
+    });
+  </script>
+
+</body>
+
+</html>
