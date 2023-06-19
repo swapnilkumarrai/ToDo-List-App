@@ -28,13 +28,10 @@ def tasks(request):
     if request.method == "POST":
         deleteId = request.POST.get('deleteTaskId')
         updateId = request.POST.get('updateTask')
-        print("yesss1", updateId)
         if deleteId:
             Task.objects.filter(taskId=deleteId).delete()
             context['deleted_success']=True
         if updateId:
-            print("yesss2", updateId)
-            print(request.POST.get('newTitle'), request.POST.get('newDesc'))
             newTitle = request.POST.get('newTitle')
             newDesc = request.POST.get('newDesc')
             context['updated_success']=True
@@ -64,5 +61,4 @@ def UpdateTask(request):
     task = Task.objects.get(taskId=TaskId)
     update_task_title = task.taskTitle
     update_task_description = task.taskDesc
-    print("gouenji shuyya", update_task_title, update_task_description)
     return render(request, 'UpdateTask.html', {'updateTaskTitle':update_task_title, 'updateTaskDescription':update_task_description, 'updateTaskId':TaskId})
