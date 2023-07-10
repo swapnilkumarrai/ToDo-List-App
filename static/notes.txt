@@ -1,0 +1,27 @@
+*************BASIC REQUIREMENTS TO BUILD A WEBSITE****************
+
+
+1.) ROLE OF HTML
+. HTML stands for hypertext markup language.
+. It is basically a standard markup language for giving a static skeleton to web application and websites.
+. It's a well standardized system.
+
+2.) ROLE OF CSS
+. Cascading Style Sheets which is known as CSS is a style sheet language that used to handle the presentation to the web page containing HTML.
+. It makes our websites beautiful and modern looking.
+
+3.) ROLE OF JAVASCRIPT
+. JavaScript which is also known as JS, is a high-level dynamic interpreted programming language.
+. It allows client-side scripting to create completely dynamic web applications and websites.
+
+4.) ROLE OF DJANGO
+. Django is a free and open source web application framework written in python.
+. Django offers a big collection of modules which you can use in your own projects.
+. Primarily, frameworks exist to save developers a lot of wasted time and headaches and Django is no different
+
+5.) MVT ARCHITECTURE OF DJANGO
+. The MVT (Model View Template) is a software design pattern.
+. The view is used to execute the buisness logic and interact with a model to carry data and renders a template.
+. There is no seperate controller and complete application is based on ModelView and Template.
+  USER<->DJANGO<->URL<->VIEW<->MODEL
+                            <->TEMPLATE

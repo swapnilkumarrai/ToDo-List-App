@@ -1,5 +1,5 @@
 from django.contrib import admin
-from home.models import Task
+from home.models import Task, Contact
 
 # Register your models here.
 
@@ -8,4 +8,8 @@ class TaskAdmin(admin.ModelAdmin):
     search_fields = ['taskTitle']
     list_per_page = 8
 
+# Register the Task model
 admin.site.register(Task, TaskAdmin)
+
+# Register the Contact model
+admin.site.register(Contact)

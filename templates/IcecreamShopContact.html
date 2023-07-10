@@ -1,0 +1,32 @@
+{% extends 'IcecreamShopBase.html' %}
+{% block title %}Contact{% endblock title %}
+{% block body %}
+<div class="container-fluid px-0 mb-3">
+    <img class="d-block w-100 mx-0" src="https://source.unsplash.com/1200x400/?tele%20phone" alt="...">
+</div>
+<div class="container mb-3 py-4">
+    <h2 class="text-center">Contact Us</h2>
+    <form method="post" action="/home/IcecreamHome/contact">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Your Name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your E-mail">
+        </div>
+        <div class="form-group">
+            <label for="phone">Contact Number</label>
+            <input type="phone" class="form-control" id="phone" name="phone" placeholder="Enter Your Phone Number">
+        </div>
+        
+        
+        <div class="form-group">
+            <label for="desc">Send a message</label>
+            <textarea class="form-control" id="desc" name="desc" rows="3" placeholder="Enter Your Message"></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+</div>
+{% endblock body %}
