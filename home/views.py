@@ -25,7 +25,6 @@ def home(request):
     success_message = ''
     for msg in stored_messages:
         success_message = msg
-    print("balze", request.user)
     if request.user.is_authenticated:
         username = request.user
         username = str(username).capitalize()
@@ -270,32 +269,63 @@ def textutilAnalyze(request):
 
 
 def icecreamHome(request):
-    context = {'variable': '22'}
-    return render(request, 'IcecreamShopHome.html', context)
-    # return HttpResponse("Swapnil HomePage")
+    if request.user.is_authenticated:
+        context = {'variable': '22'}
+        return render(request, 'IcecreamShopHome.html', context)
+    else:
+        return HttpResponse('404 - Not Found')
 
 
 def icecreamAbout(request):
-    return render(request, 'IcecreamShopAbout.html')
+    if request.user.is_authenticated:
+        return render(request, 'IcecreamShopAbout.html')
+    else:
+        return HttpResponse('404 - Not Found')
 
 
 def icecreamServices(request):
-    return render(request, 'IcecreamShopServices.html')
+    if request.user.is_authenticated:
+        return render(request, 'IcecreamShopServices.html')
+    else:
+        return HttpResponse('404 - Not Found')
 
 
 def icecreamContact(request):
-    if request.method == "POST":
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        desc = request.POST.get('desc')
-        contact = Contact(name=name, email=email, phone=phone,
-                          desc=desc, date=datetime.today())
-        contact.save()
-        messages.success(request, 'Your message has been sent !')
-        messages.success(request, 'Thankyou for reaching us.')
-        messages.success(request, 'Our team will contact you')
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            phone = request.POST.get('phone')
+            desc = request.POST.get('desc')
+            contact = Contact(name=name, email=email, phone=phone,
+                            desc=desc, date=datetime.today())
+            contact.save()
+            messages.success(request, 'Your message has been sent !')
+            messages.success(request, 'Thankyou for reaching us.')
+            messages.success(request, 'Our team will contact you')
 
-    return render(request, 'IcecreamShopContact.html')
+        return render(request, 'IcecreamShopContact.html')
+    else:
+        return HttpResponse('404 - Not Found')
 
+
+# CodeX Blog code
+
+def CodeXhome(request):
+    if request.user.is_authenticated:
+        return render(request, 'codexHome.html')
+    else:
+        return HttpResponse('404 - Not Found')
+
+def CodeXcontact(request):
+    if request.user.is_authenticated:
+        return render(request, 'codexContact.html')
+    else:
+        return HttpResponse('404 - Not Found')
+
+def CodeXabout(request):
+    if request.user.is_authenticated:
+        return render(request, 'codexAbout.html')
+    else:
+        return HttpResponse('404 - Not Found')
 
