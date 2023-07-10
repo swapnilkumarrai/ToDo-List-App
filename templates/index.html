@@ -10,25 +10,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
     integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
-    {% load static %}
-
-  <style>
-    @keyframes movingText {
-      0% {
-        transform: translateX(-100%);
-        color: green;
-      }
-
-      100% {
-        transform: translateX(100%);
-        color: green;
-      }
-    }
-
-    .moving-heading {
-      animation: movingText 10s linear infinite;
-    }
-  </style>
+  {% load static %}
 
   <title>Home - ToDos List</title>
   <style>
@@ -41,7 +23,7 @@
       z-index: -1;
       overflow: hidden;
     }
-  
+
     .animated-background video {
       position: absolute;
       top: 0;
@@ -52,14 +34,16 @@
       transform: scale(1) translate(0, 0);
       animation: animateBackground 20s linear infinite;
     }
-  
+
     @keyframes animateBackground {
       0% {
         transform: scale(1) translate(0, 0);
       }
+
       50% {
         transform: scale(1.1) translate(-5%, 0);
       }
+
       100% {
         transform: scale(1) translate(0, 0);
       }
@@ -75,7 +59,7 @@
     </video>
   </div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">ToDo</a>
+    <a class="navbar-brand" href="/home">ToDo</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -84,18 +68,34 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/tasks">Tasks</a>
+          <a class="nav-link" href="/home/tasks">Tasks</a>
         </li>
-
       </ul>
-
+      {% if username %}
+      <div class="text-center" style="color: #b84dff !important; font-size: 21px;">
+        <span id="username"></span>
+      </div>
+      {% endif %}
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" style="color: red !important; font-size: 20px;" href="/logout">Logout</a>
+        </li>
+      </ul>
     </div>
   </nav>
+  {% if success_messages %}
+  <div id="alertDiv3" class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>{{success_messages}}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %}
   {% if failed %}
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <div id="alertDiv2" class="alert alert-danger alert-dismissible fade show" role="alert">
     <strong>Sorry!</strong> You can't save the empty task. You have to mention something about the task before saving.
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
@@ -103,7 +103,7 @@
   </div>
   {% endif %}
   {% if success %}
-  <div id="alertDiv" class="alert alert-info alert-dismissible fade show" role="alert" style="margin-top: 20px;">
+  <div id="alertDiv1" class="alert alert-info alert-dismissible fade show" role="alert" style="margin-top: 20px;">
     <strong>Hurray!</strong> Your task has been added to the list.
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
@@ -111,17 +111,20 @@
   </div>
   {% endif %}
   <div class="container my-3">
-    <h2 class="text-center moving-heading">Welcome to ToDo list - Add a Task</h2>
-    <form action="/" method="post">
+    <h2 class="text-center">Welcome to ToDo list - Add a Task</h2>
+    <form action="/home" method="post">
       {% csrf_token %}
       <div class="form-group">
-        <label for="title" style="color: darkred; font-weight: bold; font-style: italic; font-size: 20px;">Task Title</label>
-        <input type="text" class="form-control" style="border: 2px solid darkred; border-radius: 8px;" id="title" name="title" aria-describedby="TitleHelp"
-          placeholder="Enter Task Title">
+        <label for="title" style="color: darkred; font-weight: bold; font-style: italic; font-size: 20px;">Task
+          Title</label>
+        <input type="text" class="form-control" style="border: 2px solid darkred; border-radius: 8px;" id="title"
+          name="title" aria-describedby="TitleHelp" placeholder="Enter Task Title">
       </div>
       <div class="form-group">
-        <label for="desc" style="color: darkred; font-weight: bold; font-style: italic; font-size: 20px;">Task Description</label>
-        <textarea class="form-control" style="border: 2px solid darkred; border-radius: 8px;" name="desc" id="desc" cols="30" rows="10"></textarea>
+        <label for="desc" style="color: darkred; font-weight: bold; font-style: italic; font-size: 20px;">Task
+          Description</label>
+        <textarea class="form-control" style="border: 2px solid darkred; border-radius: 8px;" name="desc" id="desc"
+          cols="30" rows="10"></textarea>
       </div>
 
       <button type="submit" class="btn btn-primary" style="border-radius: 8px;">Submit</button>
@@ -146,16 +149,86 @@
     integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
 
-    <script>
-      // Set the duration (in milliseconds) for the alert to be displayed
-      var duration = 5000; // 5 seconds
-    
-      // Function to hide the alert after the specified duration
-      setTimeout(function() {
-        var alertDiv = document.getElementById('alertDiv');
-        alertDiv.style.display = 'none';
-      }, duration);
-    </script>
+  <script>
+    // Set the duration (in milliseconds) for the alert to be displayed
+    var duration = 5000; // 5 seconds
+
+    // Function to hide the alert after the specified duration
+    setTimeout(function () {
+      var alertDiv = document.getElementById('alertDiv1');
+      alertDiv.style.display = 'none';
+    }, duration);
+  </script>
+  <script>
+    // Set the duration (in milliseconds) for the alert to be displayed
+    var duration = 5000; // 5 seconds
+
+    // Function to hide the alert after the specified duration
+    setTimeout(function () {
+      var alertDiv = document.getElementById('alertDiv2');
+      alertDiv.style.display = 'none';
+    }, duration);
+  </script>
+  <script>
+    // Set the duration (in milliseconds) for the alert to be displayed
+    var duration = 7000; // 5 seconds
+
+    // Function to hide the alert after the specified duration
+    setTimeout(function () {
+      var alertDiv = document.getElementById('alertDiv3');
+      alertDiv.style.display = 'none';
+    }, duration);
+  </script>
+
+  <script>
+    var words = ['Welcome {{username}} !', 'Thanks for choosing us !'],
+      part,
+      i = 0,
+      offset = 0,
+      len = words.length,
+      forwards = true,
+      skip_count = 0,
+      skip_delay = 15,
+      speed = 70;
+
+    var wordflick = function () {
+      setInterval(function () {
+        if (forwards) {
+          if (offset >= words[i].length) {
+            ++skip_count;
+            if (skip_count == skip_delay) {
+              forwards = false;
+              skip_count = 0;
+            }
+          }
+        }
+        else {
+          if (offset == 0) {
+            forwards = true;
+            i++;
+            offset = 0;
+            if (i >= len) {
+              i = 0;
+            }
+          }
+        }
+        part = words[i].substr(0, offset);
+        if (skip_count == 0) {
+          if (forwards) {
+            offset++;
+          }
+          else {
+            offset--;
+          }
+        }
+        document.getElementById("username").textContent = part;
+      }, speed);
+    };
+
+    $(document).ready(function () {
+      wordflick();
+    });
+  </script>
 </body>
 
 </html>

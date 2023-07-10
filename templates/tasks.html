@@ -157,7 +157,7 @@
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">ToDo</a>
+    <a class="navbar-brand" href="/home">ToDo</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -166,12 +166,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="/tasks">Tasks</a>
+          <a class="nav-link" href="/home/tasks">Tasks</a>
         </li>
-
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" style="color: red !important; font-size: 20px;" href="/logout">Logout</a>
+        </li>
       </ul>
     </div>
   </nav>
@@ -217,7 +221,7 @@
           <td>{{ task.taskDesc }}</td>
           <td class="task-cell">
             <div style='display: flex; gap: 10px; justify-content: center;'>
-              <form action="/tasks/UpdateTask" method="POST">
+              <form action="/home/tasks/UpdateTask" method="POST">
                 <!-- Submit button as the update button -->
                 {% csrf_token %}
                 <input type="hidden" name="updateTaskId" value="{{ task.taskId }}">
@@ -232,7 +236,7 @@
                   </svg>
                 </button>
               </form>
-              <form action="/tasks" method="POST">
+              <form action="/home/tasks" method="POST">
                 <!-- Submit button as the delete button -->
                 {% csrf_token %}
                 <input type="hidden" name="deleteTaskId" value="{{ task.taskId }}">
@@ -255,9 +259,9 @@
               <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" style="border-radius: 8px;" aria-expanded="false">NOT STARTED</button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="/tasks?status=1&Id={{ task.taskId }}">IN PROGRESS</a>
+                <a class="dropdown-item" href="/home/tasks?status=1&Id={{ task.taskId }}">IN PROGRESS</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/tasks?status=2&Id={{ task.taskId }}">COMPLETED</a>
+                <a class="dropdown-item" href="/home/tasks?status=2&Id={{ task.taskId }}">COMPLETED</a>
               </div>
             </div>
             {% elif task.taskStatus == 1 %}
@@ -265,9 +269,9 @@
               <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
                 style="border-radius: 8px;" aria-haspopup="true" aria-expanded="false">IN PROGRESS</button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="/tasks?status=0&Id={{ task.taskId }}">NOT STARTED</a>
+                <a class="dropdown-item" href="/home/tasks?status=0&Id={{ task.taskId }}">NOT STARTED</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/tasks?status=2&Id={{ task.taskId }}">COMPLETED</a>
+                <a class="dropdown-item" href="/home/tasks?status=2&Id={{ task.taskId }}">COMPLETED</a>
               </div>
             </div>
             {% else %}
@@ -275,9 +279,9 @@
               <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
                 style="border-radius: 8px;" aria-haspopup="true" aria-expanded="false">COMPLETED</button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="/tasks?status=0&Id={{ task.taskId }}">NOT STARTED</a>
+                <a class="dropdown-item" href="/home/tasks?status=0&Id={{ task.taskId }}">NOT STARTED</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/tasks?status=1&Id={{ task.taskId }}">IN PROGRESS</a>
+                <a class="dropdown-item" href="/home/tasks?status=1&Id={{ task.taskId }}">IN PROGRESS</a>
               </div>
             </div>
             {% endif %}

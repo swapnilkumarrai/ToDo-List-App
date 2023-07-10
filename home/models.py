@@ -7,6 +7,8 @@ class Task(models.Model):
     taskDesc = models.TextField(blank=True, null=True)
     time = models.DateTimeField(auto_now_add=True)
     taskStatus = models.IntegerField(default=0)
+    userName = models.CharField(max_length=100)
+    eMail = models.EmailField(max_length=100)
 
     def __str__(self):
         return self.taskTitle
