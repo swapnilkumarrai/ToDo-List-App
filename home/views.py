@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from datetime import datetime
 from home.models import Contact
+from joblib import load
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Create your views here.
 
@@ -16,8 +18,7 @@ def SigninSignup(request):
         if 'successfully' in str(msg).lower():
             success_message = msg
         else:
-            error_message = msg 
-    print("opm", success_message)           
+            error_message = msg  
     return render(request, 'Signin-Signup.html', {"success_messages":success_message, "error_messages": error_message})
 
 def home(request):
@@ -27,8 +28,8 @@ def home(request):
         success_message = msg
     if request.user.is_authenticated:
         username = request.user
-        username = str(username).capitalize()
-        context = {'success':False, 'failed':False, 'success_messages': success_message, 'username':username}
+        username1 = str(username).capitalize()
+        context = {'success':False, 'failed':False, 'success_messages': success_message, 'username':username1}
         if request.method == "POST":
             # Handling the form
             title = request.POST.get('title')
@@ -38,11 +39,26 @@ def home(request):
                 context = {'failed':True}
             else:
                 if not title:
-                    ins = Task(taskTitle=None, taskDesc=desc, userName=user)
+                    model = load('static/taskPriority.joblib')
+                    vectorizer = load('static/TfidfVectorizer.joblib')
+                    prediction_feature = vectorizer.transform([desc])
+                    predict_priority = model.predict(prediction_feature)
+                    predict_priority = predict_priority.item()
+                    ins = Task(taskTitle=None, taskDesc=desc, userName=user, taskPriority=predict_priority)
                 elif not desc:
-                    ins = Task(taskTitle=title, taskDesc=None, userName=user)
+                    model = load('static/taskPriority.joblib')
+                    vectorizer = load('static/TfidfVectorizer.joblib')
+                    prediction_feature = vectorizer.transform([title])
+                    predict_priority = model.predict(prediction_feature)
+                    predict_priority = predict_priority.item()
+                    ins = Task(taskTitle=title, taskDesc=None, userName=user, taskPriority=predict_priority)
                 else:  
-                    ins = Task(taskTitle=title, taskDesc=desc, userName=user)
+                    model = load('static/taskPriority.joblib')
+                    vectorizer = load('static/TfidfVectorizer.joblib')
+                    prediction_feature = vectorizer.transform([desc])
+                    predict_priority = model.predict(prediction_feature)
+                    predict_priority = predict_priority.item()
+                    ins = Task(taskTitle=title, taskDesc=desc, userName=user, taskPriority=predict_priority)
                 ins.save()
                 context = {'success':True}
         return render(request, 'index.html', context)
@@ -72,19 +88,17 @@ def tasks(request):
                 else:
                     Task.objects.filter(taskId=updateId).update(taskTitle=newTitle, taskDesc=newDesc)
         else:
-            print("hello1", request.GET.get('Id'))
             if request.GET.get('Id') is not None:
-                print("hello2")
                 if request.GET.get('status') == '1':
                     Task.objects.filter(taskId=request.GET.get('Id')).update(taskStatus=1)
                 elif request.GET.get('status') == '2':
                     Task.objects.filter(taskId=request.GET.get('Id')).update(taskStatus=2)
                 else:
                     Task.objects.filter(taskId=request.GET.get('Id')).update(taskStatus=0)
-
-        allTasks = Task.objects.filter(userName__exact=str(request.user))
+        
+        allTasks = Task.objects.filter(userName__exact=str(request.user)).order_by('taskPriority')
         context['tasks']=allTasks
-        return render(request, 'tasks.html', context)
+        return render(request, 'tasks.html', context)   
     else:
         return HttpResponse('404 - Not Found')
 
