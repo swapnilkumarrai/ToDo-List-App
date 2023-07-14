@@ -6,11 +6,15 @@ from django.contrib import messages
 from datetime import datetime
 from home.models import Contact
 from joblib import load
-from sklearn.feature_extraction.text import TfidfVectorizer
+import openai
 
 # Create your views here.
 
-def SigninSignup(request):
+
+# -------------------------------------------Signin/Signup--------------------------------------------
+
+
+def SigninSignup(request):      # Function to render Signin/Signup page
     stored_messages = messages.get_messages(request)
     success_message = ''
     error_message = ''
@@ -21,7 +25,11 @@ def SigninSignup(request):
             error_message = msg  
     return render(request, 'Signin-Signup.html', {"success_messages":success_message, "error_messages": error_message})
 
-def home(request):
+
+# ----------------------------------------CODE BASE TO HANDLE TODO APPLICATION--------------------------------------------
+
+
+def home(request):      # This will render the main home page of ToDo App.
     stored_messages = messages.get_messages(request)
     success_message = ''
     for msg in stored_messages:
@@ -41,7 +49,7 @@ def home(request):
                 if not title:
                     model = load('static/taskPriority.joblib')
                     vectorizer = load('static/TfidfVectorizer.joblib')
-                    prediction_feature = vectorizer.transform([desc])
+                    prediction_feature = vectorizer.transform([desc])    #  Here I am using a ML model to predict the task priority based on the task description
                     predict_priority = model.predict(prediction_feature)
                     predict_priority = predict_priority.item()
                     ins = Task(taskTitle=None, taskDesc=desc, userName=user, taskPriority=predict_priority)
@@ -66,7 +74,7 @@ def home(request):
         return HttpResponse('404 - Not Found')
 
 
-def tasks(request):
+def tasks(request):      # This will update and render the Task page
     if request.user.is_authenticated:
         context = {'deleted_success':False, 'updated_success':False}
         if request.method == "POST":
@@ -90,7 +98,7 @@ def tasks(request):
         else:
             if request.GET.get('Id') is not None:
                 if request.GET.get('status') == '1':
-                    Task.objects.filter(taskId=request.GET.get('Id')).update(taskStatus=1)
+                    Task.objects.filter(taskId=request.GET.get('Id')).update(taskStatus=1)  # Here I am updating the task status(completed, not started, in progress)
                 elif request.GET.get('status') == '2':
                     Task.objects.filter(taskId=request.GET.get('Id')).update(taskStatus=2)
                 else:
@@ -103,7 +111,7 @@ def tasks(request):
         return HttpResponse('404 - Not Found')
 
 
-def UpdateTask(request):
+def UpdateTask(request):      # This is the function to handle the update task
     if request.user.is_authenticated:
         TaskId = request.POST.get('updateTaskId')
         task = Task.objects.get(taskId=TaskId)
@@ -114,7 +122,10 @@ def UpdateTask(request):
         return HttpResponse('404 - Not Found')
 
 
-def handleSignup(request):
+# ----------------------------------------CODE BASE TO HANDLE AUTHENTICATION--------------------------------------------
+
+
+def handleSignup(request):      # This function will handle the Signup to ToDo app
     if request.method =='POST':
         # Get the post parameters
         username = request.POST['username']
@@ -151,7 +162,7 @@ def handleSignup(request):
         return HttpResponse('404 - Not Found')  
     
 
-def handleLogin(request):
+def handleLogin(request):      # This function will handle the Login to ToDo app
     if request.method =='POST':
         # Get the post parameters
         username = request.POST['username']
@@ -166,13 +177,13 @@ def handleLogin(request):
             return redirect('/')
     return HttpResponse('404 - Not Found')
 
-def handleLogout(request):
+def handleLogout(request):      # This function will handle the Logout
     logout(request)
     messages.success(request, "Successfully Logged Out !")
     return redirect('/')
 
 
-def handleDelete(request):
+def handleDelete(request):      # This function will handle the Delete account will all its data
     if request.method =='POST':
         # Get the post parameters
         username = request.POST['username']
@@ -196,7 +207,6 @@ def handleDelete(request):
             user.delete()
             obj = Task.objects.filter(userName__exact=username)
             if obj.exists():
-                print("goku", obj)
                 obj.delete()
             messages.success(request, "Successfully Deleted account !")
             return redirect('/')
@@ -206,17 +216,19 @@ def handleDelete(request):
             return redirect('/')
     else:
         return HttpResponse('404 - Not Found')
+    
 
 
-# Textutil Code
+# # ----------------------------------------CODE BASE TO HANDLE TEXTUTIL WEBSITE--------------------------------------------
 
-def textutil(request):
+
+def textutil(request):      # This function will render the TextUtil page
     if request.user.is_authenticated:
         return render(request, 'textutil.html')
     else:
         return HttpResponse('404 - Not Found')
 
-def textutilAnalyze(request):
+def textutilAnalyze(request):      # This function will handle the text analysis and render TextAnalyze page with optimised text.
     if request.user.is_authenticated:
         djtext = request.POST.get('text', 'default')
         removepunc = request.POST.get('removepunc', 'off')
@@ -279,10 +291,10 @@ def textutilAnalyze(request):
         return HttpResponse('404 - Not Found')
     
 
-#  Icecream Shop code
+#  # ----------------------------------------CODE BASE TO HANDLE ICECREAM SHOP WEBSITE--------------------------------------------
 
 
-def icecreamHome(request):
+def icecreamHome(request):      # This function will return Icecream Shop home page
     if request.user.is_authenticated:
         context = {'variable': '22'}
         return render(request, 'IcecreamShopHome.html', context)
@@ -290,21 +302,21 @@ def icecreamHome(request):
         return HttpResponse('404 - Not Found')
 
 
-def icecreamAbout(request):
+def icecreamAbout(request):      # This function will render Icecream shop about page.
     if request.user.is_authenticated:
         return render(request, 'IcecreamShopAbout.html')
     else:
         return HttpResponse('404 - Not Found')
 
 
-def icecreamServices(request):
+def icecreamServices(request):      # This function will render Icecreamshop Services page.
     if request.user.is_authenticated:
         return render(request, 'IcecreamShopServices.html')
     else:
         return HttpResponse('404 - Not Found')
 
 
-def icecreamContact(request):
+def icecreamContact(request):      # This function will render Icecream shop contact page
     if request.user.is_authenticated:
         if request.method == "POST":
             name = request.POST.get('name')
@@ -323,23 +335,42 @@ def icecreamContact(request):
         return HttpResponse('404 - Not Found')
 
 
-# CodeX Blog code
+# # ----------------------------------------CODE BASE TO HANDLE CODEX BLOG WEBSITE--------------------------------------------
 
-def CodeXhome(request):
+def CodeXhome(request):      # This function will return Codexhome page.
     if request.user.is_authenticated:
         return render(request, 'codexHome.html')
     else:
         return HttpResponse('404 - Not Found')
 
-def CodeXcontact(request):
+def CodeXcontact(request):      # This will render codex contact page
     if request.user.is_authenticated:
         return render(request, 'codexContact.html')
     else:
         return HttpResponse('404 - Not Found')
 
-def CodeXabout(request):
+def CodeXabout(request):      # This will render Codex about page
     if request.user.is_authenticated:
         return render(request, 'codexAbout.html')
     else:
         return HttpResponse('404 - Not Found')
 
+
+# # ----------------------------------------CODE BASE TO HANDLE OPENAI CHATBOT--------------------------------------------
+
+def chatBot(request):      # This function will use openAI api and return response to the question asked. It will render AIBot.html.
+    if request.user.is_authenticated:
+        username = str(request.user).capitalize()
+        userQuestion = ''
+        axelResponse = ''
+        if request.method == "POST":
+            userQuestion = request.POST.get('userQuestion')
+            openai.api_key = "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"
+            completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": f" {userQuestion} "}])
+            axelResponse = completion.choices[0].message.content
+
+            
+        context = {"userQuestion":userQuestion, "axelResponse":axelResponse, "username":username}            
+        return render(request, 'AIBot.html', context)    
+    else:
+        return HttpResponse('404 - Not Found')

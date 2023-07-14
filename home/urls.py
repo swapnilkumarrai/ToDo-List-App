@@ -36,5 +36,6 @@ urlpatterns = [
     path('home/IcecreamHome/contact', views.icecreamContact, name='icecreamContact'),
     path('home/CodeX', views.CodeXhome, name='CodeXhome'),
     path('home/CodeX/CodeXcontact', views.CodeXcontact, name='CodeXcontact'),
-    path('home/CodeX/CodeXabout', views.CodeXabout, name='CodeXabout')
+    path('home/CodeX/CodeXabout', views.CodeXabout, name='CodeXabout'),
+    path('home/askAxel', views.chatBot, name='chatBot')
 ]

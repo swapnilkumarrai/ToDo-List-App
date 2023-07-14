@@ -1,6 +1,7 @@
 {% extends 'IcecreamShopBase.html' %}
 
 {% block body %}
+{% load static %}
 <div class="container-fluid px-0 my-0">
   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
@@ -10,7 +11,7 @@
     </ol>
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img class="d-block w-100" src="https://source.unsplash.com/1600x600/?ice%20cream" alt="First slide">
+        <img class="d-block w-100" src="{% static 'Icecream1.jpg' %}" alt="First slide">
         <div class="carousel-caption d-none d-md-block">
           <h5>Welcome To The Best Ice Cream Shop In Town</h5>
           <p>Step into our whimsical wonderland of frozen delights and indulge in the creamiest, most heavenly ice cream
@@ -18,7 +19,7 @@
         </div>
       </div>
       <div class="carousel-item">
-        <img class="d-block w-100" src="https://source.unsplash.com/1600x600/?milk%20shake" alt="Second slide">
+        <img class="d-block w-100" src="{% static 'Icecream2.jpg' %}" alt="Second slide">
         <div class="carousel-caption d-none d-md-block">
           <h5>Discover ice cream perfection, one scoop at a time.</h5>
           <p>Embark on a delectable journey to our enchanting ice cream haven, where luscious flavors dance on your
@@ -26,7 +27,7 @@
         </div>
       </div>
       <div class="carousel-item">
-        <img class="d-block w-100" src="https://source.unsplash.com/1600x600/?icecream%20" alt="Third slide">
+        <img class="d-block w-100" src="{% static 'Icecream3.jpg' %}" alt="Third slide">
         <div class="carousel-caption d-none d-md-block">
           <h5>Escape to ice cream paradise and treat yourself to pure frozen bliss.</h5>
           <p>Savor the extraordinary artistry of our handcrafted ice cream creations, meticulously crafted with love and
@@ -50,7 +51,7 @@
   <div class="row">
     <div class="col-md-4">
       <div class="card mb-4 shadow-sm">
-        <img class="d-block w-100" src="https://source.unsplash.com/1200x900/?straberry%20icecream" alt="...">
+        <img class="d-block w-100" src="{% static 'Icecream4.jpg' %}" alt="...">
         <div class="card-body">
           <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
             content. This content is a little bit longer.</p>
@@ -66,7 +67,7 @@
     </div>
     <div class="col-md-4">
       <div class="card mb-4 shadow-sm">
-        <img class="d-block w-100" src="https://source.unsplash.com/1200x900/?chocolate%20icecream" alt="...">
+        <img class="d-block w-100" src="{% static 'Icecream5.jpg' %}" alt="...">
         <div class="card-body">
           <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
             content. This content is a little bit longer.</p>
@@ -82,56 +83,7 @@
     </div>
     <div class="col-md-4">
       <div class="card mb-4 shadow-sm">
-        <img class="d-block w-100" src="https://source.unsplash.com/1200x900/?vanilla%20icecream" alt="...">
-        <div class="card-body">
-          <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-            content. This content is a little bit longer.</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-            </div>
-            <small class="text-muted">9 mins</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="card mb-4 shadow-sm">
-        <img class="d-block w-100" src="https://source.unsplash.com/1200x900/?blackberry%20icecream" alt="...">
-        <div class="card-body">
-          <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-            content. This content is a little bit longer.</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-            </div>
-            <small class="text-muted">9 mins</small>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 shadow-sm">
-        <img class="d-block w-100" src="https://source.unsplash.com/1200x900/?pistachio%20icecream" alt="...">
-        <div class="card-body">
-          <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-            content. This content is a little bit longer.</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-            </div>
-            <small class="text-muted">9 mins</small>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 shadow-sm">
-        <img class="d-block w-100" src="https://source.unsplash.com/1200x900/?butter scotch%20icecream" alt="...">
+        <img class="d-block w-100" src="{% static 'Icecream6.jpg' %}" alt="...">
         <div class="card-body">
           <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
             content. This content is a little bit longer.</p>
@@ -148,7 +100,7 @@
 
     <div class="col-md-4">
       <div class="card mb-4 shadow-sm">
-        <img class="d-block w-100" src="https://source.unsplash.com/1200x900/?cherry%20icecream" alt="...">
+        <img class="d-block w-100" src="{% static 'Icecream7.jpg' %}" alt="...">
         <div class="card-body">
           <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
             content. This content is a little bit longer.</p>
@@ -164,7 +116,7 @@
     </div>
     <div class="col-md-4">
       <div class="card mb-4 shadow-sm">
-        <img class="d-block w-100" src="https://source.unsplash.com/1200x900/?mocha%20icecream" alt="...">
+        <img class="d-block w-100" src="{% static 'Icecream8.jpg' %}" alt="...">
         <div class="card-body">
           <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
             content. This content is a little bit longer.</p>
@@ -180,7 +132,56 @@
     </div>
     <div class="col-md-4">
       <div class="card mb-4 shadow-sm">
-        <img class="d-block w-100" src="https://source.unsplash.com/1200x900/?browney%20fudge" alt="...">
+        <img class="d-block w-100" src="{% static 'Icecream9.jpg' %}" alt="...">
+        <div class="card-body">
+          <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+            content. This content is a little bit longer.</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+            </div>
+            <small class="text-muted">9 mins</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card mb-4 shadow-sm">
+        <img class="d-block w-100" src="{% static 'Icecream10.jpg' %}" alt="...">
+        <div class="card-body">
+          <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+            content. This content is a little bit longer.</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+            </div>
+            <small class="text-muted">9 mins</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-4 shadow-sm">
+        <img class="d-block w-100" src="{% static 'Icecream11.jpg' %}" alt="...">
+        <div class="card-body">
+          <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+            content. This content is a little bit longer.</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+            </div>
+            <small class="text-muted">9 mins</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-4 shadow-sm">
+        <img class="d-block w-100" src="{% static 'Icecream12.jpg' %}" alt="...">
         <div class="card-body">
           <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
             content. This content is a little bit longer.</p>
