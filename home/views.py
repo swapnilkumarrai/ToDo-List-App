@@ -7,6 +7,7 @@ from datetime import datetime
 from home.models import Contact
 from joblib import load
 import openai
+from decouple import config
 
 # Create your views here.
 
@@ -365,7 +366,7 @@ def chatBot(request):      # This function will use openAI api and return respon
         axelResponse = ''
         if request.method == "POST":
             userQuestion = request.POST.get('userQuestion')
-            openai.api_key = "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"
+            openai.api_key = config('OPENAI_API_KEY')
             completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": f" {userQuestion} "}])
             axelResponse = completion.choices[0].message.content
 
