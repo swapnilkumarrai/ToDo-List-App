@@ -3,7 +3,7 @@ from sklearn.tree import DecisionTreeRegressor
 from joblib import dump
 import pandas as pd
 
-task = pd.read_excel("TaskPriorityData.xlsx")
+task = pd.read_excel("C:/swapnil/ToDoList/static/ModelTrainingCode/TaskPriorityData.xlsx")
 
 # Initialize the vectorizer
 vectorizer = TfidfVectorizer()

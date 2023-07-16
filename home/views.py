@@ -48,22 +48,22 @@ def home(request):      # This will render the main home page of ToDo App.
                 context = {'failed':True}
             else:
                 if not title:
-                    model = load('static/taskPriority.joblib')
-                    vectorizer = load('static/TfidfVectorizer.joblib')
+                    model = load('static/ModelTrainingCode/taskPriority.joblib')
+                    vectorizer = load('static/ModelTrainingCode/TfidfVectorizer.joblib')
                     prediction_feature = vectorizer.transform([desc])    #  Here I am using a ML model to predict the task priority based on the task description
                     predict_priority = model.predict(prediction_feature)
                     predict_priority = predict_priority.item()
                     ins = Task(taskTitle=None, taskDesc=desc, userName=user, taskPriority=predict_priority)
                 elif not desc:
-                    model = load('static/taskPriority.joblib')
-                    vectorizer = load('static/TfidfVectorizer.joblib')
+                    model = load('static/ModelTrainingCode/taskPriority.joblib')
+                    vectorizer = load('static/ModelTrainingCode/TfidfVectorizer.joblib')
                     prediction_feature = vectorizer.transform([title])
                     predict_priority = model.predict(prediction_feature)
                     predict_priority = predict_priority.item()
                     ins = Task(taskTitle=title, taskDesc=None, userName=user, taskPriority=predict_priority)
                 else:  
-                    model = load('static/taskPriority.joblib')
-                    vectorizer = load('static/TfidfVectorizer.joblib')
+                    model = load('static/ModelTrainingCode/taskPriority.joblib')
+                    vectorizer = load('static/ModelTrainingCode/TfidfVectorizer.joblib')
                     prediction_feature = vectorizer.transform([desc])
                     predict_priority = model.predict(prediction_feature)
                     predict_priority = predict_priority.item()
