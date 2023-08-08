@@ -23,6 +23,7 @@ urlpatterns = [
     path('', views.SigninSignup, name='Signin/Signup'),
     path('home', views.home, name='home'),
     path('home/tasks', views.tasks, name='tasks'),
+    path('home/tasks/dashboard', views.dashboard, name='dashboard'),
     path('home/tasks/UpdateTask', views.UpdateTask, name='tasks'),
     path('signup', views.handleSignup, name='handleSignup'),
     path('login', views.handleLogin, name='handleLogin'),

@@ -8,6 +8,17 @@ from home.models import Contact
 from joblib import load
 import openai
 from decouple import config
+import pandas as pd
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Use Agg backend
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import matplotlib.pyplot as plt
+import os
+import panel as pn
+from bokeh.embed import server_document
+from panel.io import serve as panel_serve
+pn.extension()
 
 # Create your views here.
 
@@ -375,3 +386,113 @@ def chatBot(request):      # This function will use openAI api and return respon
         return render(request, 'AIBot.html', context)    
     else:
         return HttpResponse('404 - Not Found')
+
+
+# def dashboard_panel(request):
+#     if request.user.is_authenticated:
+#         username = str(request.user)
+#         # Load the PNG images using Panel
+#         progress_pie_chart = pn.pane.PNG(f'static/Dashboard/progress_pie_chart_{username}.png', sizing_mode='scale_both')
+#         priority_bar_chart = pn.pane.PNG(f'static/Dashboard/priority_bar_chart_{username}.png', sizing_mode='scale_both')
+#         task_completion_rate_scatter_plot = pn.pane.PNG(f'static/Dashboard/task_completion_rate_scatter_plot_{username}.png', sizing_mode='scale_both')
+#         task_management = pn.pane.JPG('static/Dashboard/Task_Management.jpg', sizing_mode='scale_both')
+
+#         row_layout = pn.Row(pn.Column(progress_pie_chart, priority_bar_chart), task_completion_rate_scatter_plot)
+        
+
+#         # Create the sidebar content using Panel
+#         # <a href='https://pngtree.com/freepng/depressed-angle-business-work-daily-illustration_4205499.html'>png image from pngtree.com/</a>
+#         sidebar_content = pn.Column(
+#             pn.pane.Markdown("# Analyze your progress using visualizations"),
+#             pn.pane.Markdown("#### Remember, every small step you take toward completing your daily tasks brings you closer to your goals and aspirations. Stay motivated and focused on your journey to success!"),
+#             task_management,
+#             pn.pane.Markdown("## Settings")
+#         )
+
+#          # Combine main content and sidebar using a Panel template with the default theme
+#         template = pn.template.FastListTemplate(
+#             title='ToDo Task Dashboard', 
+#             sidebar=[sidebar_content],
+#             main=[row_layout],
+#             accent_base_color="#88d8b0",
+#             header_background="#88d8b0"
+#         )
+
+#         # Serve the Panel app and get the script and div to embed in the Django template
+#         panel_app = pn.panel(template)
+#         panel_server = panel_serve(panel_app)
+#         script, div = server_document(panel_server, relative_urls=True)
+
+#         return render(request, 'dashboard.html', {'script': script, 'div': div})
+#     else:
+#         return HttpResponse('404 - Not Found')
+
+
+
+# # ----------------------------------------CODE BASE TO CREATE PROGRESS DASHBOARD--------------------------------------------
+
+def dashboard(request):
+    if request.user.is_authenticated:
+        def is_file_exist(directory, filename):
+            file_path = os.path.join(directory, filename)
+            if os.path.exists(file_path):
+                # Delete the file if it exists
+                try:
+                    os.remove(file_path)
+                    print(f"File '{filename}' deleted successfully.")
+                except OSError as e:
+                    print(f"Error: {e}")
+            # Create a FigureCanvasAgg and save the plot
+            canvas = FigureCanvas(plt.gcf())
+            canvas.print_png(file_path)
+
+        username = str(request.user)
+        # Creating DataFrame for all users
+        user_names = User.objects.all()
+        user_names = [user.username for user in user_names]
+        total_tasks = [Task.objects.filter(userName__exact=name).count() for name in user_names]
+        completed_tasks = [Task.objects.filter(userName__exact=name, taskStatus=1).count() for name in user_names]
+        tasks_completion_rate = [((completed_tasks[i] / total_tasks[i]) * 100) if total_tasks[i]>0 else 0 for i in range(len(total_tasks))]
+        All_Users = pd.DataFrame({'User_Names':user_names, 'Total_Tasks':total_tasks, 'Completed_Tasks':completed_tasks, 'Tasks_Completion_Rate':tasks_completion_rate})
+
+        # Creating DataFrame for every individual
+        individual_query_set = Task.objects.filter(userName__exact=username)
+        tasks_id = individual_query_set.values_list('taskId', flat=True)
+        tasks_status = individual_query_set.values_list('taskStatus', flat=True)
+        tasks_priority = individual_query_set.values_list('taskPriority', flat=True)
+        Individual_User = pd.DataFrame({'Task_Ids':tasks_id, 'Task_Status':tasks_status, 'Task_Priority':tasks_priority})
+
+        # Pie Chart
+        plt.pie(Individual_User['Task_Status'].value_counts().values, labels=['Completed' if i==2 else 'In Progress' if i==1 else 'Not Started' for i in list(Individual_User['Task_Status'].value_counts().index)], autopct='%0.1f%%', explode=[0.1 if i==2 else 0 for i in list(Individual_User['Task_Status'].value_counts().index)])
+        plt.title('Your Task Progress using Pie Chart')
+        plt.axis('equal')
+        is_file_exist('static/Dashboard/', f'progress_pie_chart_{username}.png')
+        plt.close()
+
+        # Bar Chart
+        plt.bar(list(np.sort(Individual_User['Task_Priority'].unique())), [Individual_User[(Individual_User['Task_Priority']==i) & (Individual_User['Task_Status']==2)].shape[0] for i in range(1, 6)], color=['red', 'blue', 'green', 'orange', 'purple'])
+        plt.title('Your Task Priority comparison using Bar Chart')
+        plt.xlabel('Task Priorities where 1 is most important and 5 is least important')
+        plt.ylabel('Task Compltion')
+        is_file_exist('static/Dashboard/', f'priority_bar_chart_{username}.png')
+        plt.close()
+
+        # Scatter Plot
+        plt.figure(figsize=(10, 6))
+        plt.scatter(All_Users['Total_Tasks'], All_Users['Tasks_Completion_Rate'], s=[i*10 for i in All_Users['Completed_Tasks']])
+        for i in range(All_Users.shape[0]):
+            if All_Users['User_Names'].values[i]==username:
+                plt.text(All_Users['Total_Tasks'].values[i], All_Users['Tasks_Completion_Rate'].values[i], All_Users['User_Names'].values[i].split()[0], color='red')
+            else:
+                plt.text(All_Users['Total_Tasks'].values[i], All_Users['Tasks_Completion_Rate'].values[i], All_Users['User_Names'].values[i].split()[0])
+        plt.title('Your Progress Compared To Other Users Using Scatter Plot. (marker size represents number of tasks completed)')
+        plt.xlabel('Total Task created')
+        plt.ylabel('Task completion rate')
+        plt.tight_layout()
+        is_file_exist('static/Dashboard/', f'task_completion_rate_scatter_plot_{username}.png')
+        plt.close()
+        return render(request, 'dashboard.html', {'username':username})
+    else:
+        return HttpResponse('404 - Not Found')
+
+
