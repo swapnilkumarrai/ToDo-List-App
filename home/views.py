@@ -471,7 +471,7 @@ def dashboard(request):
 
         # Bar Chart
         plt.bar(list(np.sort(Individual_User['Task_Priority'].unique())), [Individual_User[(Individual_User['Task_Priority']==i) & (Individual_User['Task_Status']==2)].shape[0] for i in range(1, 6)], color=['red', 'blue', 'green', 'orange', 'purple'])
-        plt.title('Your Task Priority comparison using Bar Chart')
+        plt.title('Your Task Priority insights using Bar Chart')
         plt.xlabel('Task Priorities where 1 is most important and 5 is least important')
         plt.ylabel('Task Compltion')
         is_file_exist('static/Dashboard/', f'priority_bar_chart_{username}.png')
