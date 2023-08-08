@@ -473,7 +473,7 @@ def dashboard(request):
         plt.bar(list(np.sort(Individual_User['Task_Priority'].unique())), [Individual_User[(Individual_User['Task_Priority']==i) & (Individual_User['Task_Status']==2)].shape[0] for i in range(1, 6)], color=['red', 'blue', 'green', 'orange', 'purple'])
         plt.title('Your Task Priority insights using Bar Chart')
         plt.xlabel('Task Priorities where 1 is most important and 5 is least important')
-        plt.ylabel('Task Compltion')
+        plt.ylabel('Task Completed')
         is_file_exist('static/Dashboard/', f'priority_bar_chart_{username}.png')
         plt.close()
 
@@ -487,7 +487,7 @@ def dashboard(request):
                 plt.text(All_Users['Total_Tasks'].values[i], All_Users['Tasks_Completion_Rate'].values[i], All_Users['User_Names'].values[i].split()[0])
         plt.title('Your Progress Compared To Other Users Using Scatter Plot. (marker size represents number of tasks completed)')
         plt.xlabel('Total Task created')
-        plt.ylabel('Task completion rate')
+        plt.ylabel('Task completion rate (%)')
         plt.tight_layout()
         is_file_exist('static/Dashboard/', f'task_completion_rate_scatter_plot_{username}.png')
         plt.close()
