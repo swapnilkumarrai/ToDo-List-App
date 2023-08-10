@@ -15,10 +15,8 @@ matplotlib.use('Agg')  # Use Agg backend
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import os
-import panel as pn
-from bokeh.embed import server_document
-from panel.io import serve as panel_serve
-pn.extension()
+import plotly.express as px
+
 
 # Create your views here.
 
@@ -388,46 +386,6 @@ def chatBot(request):      # This function will use openAI api and return respon
         return HttpResponse('404 - Not Found')
 
 
-# def dashboard_panel(request):
-#     if request.user.is_authenticated:
-#         username = str(request.user)
-#         # Load the PNG images using Panel
-#         progress_pie_chart = pn.pane.PNG(f'static/Dashboard/progress_pie_chart_{username}.png', sizing_mode='scale_both')
-#         priority_bar_chart = pn.pane.PNG(f'static/Dashboard/priority_bar_chart_{username}.png', sizing_mode='scale_both')
-#         task_completion_rate_scatter_plot = pn.pane.PNG(f'static/Dashboard/task_completion_rate_scatter_plot_{username}.png', sizing_mode='scale_both')
-#         task_management = pn.pane.JPG('static/Dashboard/Task_Management.jpg', sizing_mode='scale_both')
-
-#         row_layout = pn.Row(pn.Column(progress_pie_chart, priority_bar_chart), task_completion_rate_scatter_plot)
-        
-
-#         # Create the sidebar content using Panel
-#         # <a href='https://pngtree.com/freepng/depressed-angle-business-work-daily-illustration_4205499.html'>png image from pngtree.com/</a>
-#         sidebar_content = pn.Column(
-#             pn.pane.Markdown("# Analyze your progress using visualizations"),
-#             pn.pane.Markdown("#### Remember, every small step you take toward completing your daily tasks brings you closer to your goals and aspirations. Stay motivated and focused on your journey to success!"),
-#             task_management,
-#             pn.pane.Markdown("## Settings")
-#         )
-
-#          # Combine main content and sidebar using a Panel template with the default theme
-#         template = pn.template.FastListTemplate(
-#             title='ToDo Task Dashboard', 
-#             sidebar=[sidebar_content],
-#             main=[row_layout],
-#             accent_base_color="#88d8b0",
-#             header_background="#88d8b0"
-#         )
-
-#         # Serve the Panel app and get the script and div to embed in the Django template
-#         panel_app = pn.panel(template)
-#         panel_server = panel_serve(panel_app)
-#         script, div = server_document(panel_server, relative_urls=True)
-
-#         return render(request, 'dashboard.html', {'script': script, 'div': div})
-#     else:
-#         return HttpResponse('404 - Not Found')
-
-
 
 # # ----------------------------------------CODE BASE TO CREATE PROGRESS DASHBOARD--------------------------------------------
 
@@ -477,6 +435,14 @@ def dashboard(request):
         is_file_exist('static/Dashboard/', f'priority_bar_chart_{username}.png')
         plt.close()
 
+        # Line Plot
+        user_task_created = [Task.objects.filter(userName__exact=username, taskPriority=i).count() for i in range(1, 6)]
+        user_task_priority = [1, 2, 3, 4, 5]
+        line_plot_df = pd.DataFrame({'user_task_priority':user_task_priority, 'user_task_created':user_task_created})
+        fig = px.line(line_plot_df, x='user_task_priority', y='user_task_created', title='User Task Creation per priority')
+        # Convert the Plotly figure to HTML using plotly.io.to_html()
+        plot_html = fig.to_html() 
+
         # Scatter Plot
         plt.figure(figsize=(10, 6))
         plt.scatter(All_Users['Total_Tasks'], All_Users['Tasks_Completion_Rate'], s=[i*10 for i in All_Users['Completed_Tasks']])
@@ -491,7 +457,7 @@ def dashboard(request):
         plt.tight_layout()
         is_file_exist('static/Dashboard/', f'task_completion_rate_scatter_plot_{username}.png')
         plt.close()
-        return render(request, 'dashboard.html', {'username':username})
+        return render(request, 'dashboard.html', {'username':username, 'plot_html': plot_html})
     else:
         return HttpResponse('404 - Not Found')
 

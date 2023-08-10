@@ -139,6 +139,9 @@
             <img src="{% static 'Dashboard/priority_bar_chart_'|add:username|add:'.png' %}" alt="Graph 2">
         </div>
     </div>
+    <div>
+      {{ plot_html|safe }} <!-- Render the Plotly plot HTML safely -->
+    </div>
     <div class="center-image">
         <h2>Find out where you stand among all users</h2>
         <div class="image-wrapper">
