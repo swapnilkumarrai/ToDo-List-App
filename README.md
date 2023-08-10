@@ -25,7 +25,6 @@ Progress Dashboard: The application provides users with a comprehensive progress
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 1. Clone the repository: `git clone https://github.com/swapnilkumarrai/ToDo-List-App`
