@@ -1,5 +1,5 @@
 # Comprehensive ToDo Django Web Application
-The Comprehensive ToDo Django Web Application is a feature-rich platform that combines a variety of functionalities to create an all-in-one web experience. This application is designed to empower users with a range of tools, Using which users can manage their daily tasks and analyze their progress easily using the power of AI and other tools which can also help them to finish the task beforehand. Here's an overview of its main components:
+The Comprehensive AI powered ToDo Django Web Application is a feature-rich platform that combines a variety of functionalities to create an all-in-one web experience. This application is designed to empower users with a range of tools, Using which users can manage their daily tasks and analyze their progress easily. Here's an overview of its main components:
 
 ## Feature Highlights
 Authentication and CRUD Operations: Secure user authentication ensures that users can create accounts, log in, and manage their own tasks with full CRUD (Create, Read, Update, Delete) functionality. The application provides a seamless user experience for task management.
