@@ -2,15 +2,15 @@
 The Comprehensive AI powered ToDo Django Web Application is a feature-rich platform that combines a variety of functionalities to create an all-in-one web experience. This application is designed to empower users with a range of tools, Using which users can manage their daily tasks and analyze their progress easily. Here's an overview of its main components:
 
 ## Feature Highlights
-Authentication and CRUD Operations: Secure user authentication ensures that users can create accounts, log in, and manage their own tasks with full CRUD (Create, Read, Update, Delete) functionality. The application provides a seamless user experience for task management.
+Authentication and CRUD Operations: Secure user authentication ensures that users can create accounts, log in, log out, delete and manage their own tasks with full CRUD (Create, Read, Update, Delete) functionality. The application provides a seamless user experience for task management.
 
-Machine Learning Model Integration: The application seamlessly integrates a machine learning model, enhancing its capabilities beyond traditional task management.
+Intelligent Machine Learning Integration: This application flawlessly incorporates a machine learning model, elevating its functionalities beyond conventional task management. It employs a regression model to predict task priorities and a classification model to categorize tasks, distinguishing between work-related and personal ones.
 
 Mini Projects Showcase:
 
     Text Analysis: The application offers a built-in text analysing tool, enabling users to perform various text processing tasks.
 
-    Blogging Website: Users can go through this website to get some learning reference related to AI, DataScience, Cloud service etc and get up to date with the latest trends in IT world.
+    CodeX Blogging Website: Users can go through this website to get some learning reference related to AI, DataScience, Cloud service etc and get up to date with the latest trends in IT world.
 
     Ice Cream Shop Website: A simulated ice cream shop website showcases e-commerce functionality, allowing users to explore and interact with an online store.
 
