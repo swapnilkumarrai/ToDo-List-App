@@ -10,6 +10,7 @@ class Task(models.Model):
     userName = models.CharField(max_length=100)
     eMail = models.EmailField(max_length=100)
     taskPriority = models.DecimalField(max_digits=5, decimal_places=2)
+    taskType = models.CharField(max_length=100)
 
     def __str__(self):
         return self.taskTitle

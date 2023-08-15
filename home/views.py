@@ -56,27 +56,30 @@ def home(request):      # This will render the main home page of ToDo App.
             if not title and not desc:
                 context = {'failed':True}
             else:
+                model1 = load('static/ModelTrainingCode/taskPriority.joblib')
+                model2 = load('static/ModelTrainingCode/tasktype.joblib')
+                vectorizer = load('static/ModelTrainingCode/TfidfVectorizer.joblib')
                 if not title:
-                    model = load('static/ModelTrainingCode/taskPriority.joblib')
-                    vectorizer = load('static/ModelTrainingCode/TfidfVectorizer.joblib')
                     prediction_feature = vectorizer.transform([desc])    #  Here I am using a ML model to predict the task priority based on the task description
-                    predict_priority = model.predict(prediction_feature)
+                    predict_priority = model1.predict(prediction_feature)
                     predict_priority = predict_priority.item()
-                    ins = Task(taskTitle=None, taskDesc=desc, userName=user, taskPriority=predict_priority)
+                    predict_type = model2.predict(prediction_feature)
+                    predict_type = predict_type.item()
+                    ins = Task(taskTitle=None, taskDesc=desc, userName=user, taskPriority=predict_priority, taskType=predict_type)
                 elif not desc:
-                    model = load('static/ModelTrainingCode/taskPriority.joblib')
-                    vectorizer = load('static/ModelTrainingCode/TfidfVectorizer.joblib')
                     prediction_feature = vectorizer.transform([title])
-                    predict_priority = model.predict(prediction_feature)
+                    predict_priority = model1.predict(prediction_feature)
                     predict_priority = predict_priority.item()
-                    ins = Task(taskTitle=title, taskDesc=None, userName=user, taskPriority=predict_priority)
+                    predict_type = model2.predict(prediction_feature)
+                    predict_type = predict_type.item()
+                    ins = Task(taskTitle=title, taskDesc=None, userName=user, taskPriority=predict_priority, taskType=predict_type)
                 else:  
-                    model = load('static/ModelTrainingCode/taskPriority.joblib')
-                    vectorizer = load('static/ModelTrainingCode/TfidfVectorizer.joblib')
                     prediction_feature = vectorizer.transform([desc])
-                    predict_priority = model.predict(prediction_feature)
+                    predict_priority = model1.predict(prediction_feature)
                     predict_priority = predict_priority.item()
-                    ins = Task(taskTitle=title, taskDesc=desc, userName=user, taskPriority=predict_priority)
+                    predict_type = model2.predict(prediction_feature)
+                    predict_type = predict_type.item()
+                    ins = Task(taskTitle=title, taskDesc=desc, userName=user, taskPriority=predict_priority, taskType=predict_type)
                 ins.save()
                 context = {'success':True}
         return render(request, 'index.html', context)

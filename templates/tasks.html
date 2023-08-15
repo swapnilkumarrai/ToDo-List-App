@@ -227,6 +227,7 @@
           <th scope="col" class="table-heading text-center">Task Title</th>
           <th scope="col" class="table-heading text-center">Task Description</th>
           <th scope="col" class="table-heading text-center">Task Priority</th>
+          <th scope="col" class="table-heading text-center">Task Type</th>
           <th scope="col" class="table-heading text-center">Actions</th>
           <!-- New column for the delete and update button -->
         </tr>
@@ -238,6 +239,7 @@
           <td>{{ task.taskTitle }}</td>
           <td>{{ task.taskDesc }}</td>
           <td>{{ task.taskPriority }}</td>
+          <td>{{ task.taskType }}</td>
           <td class="task-cell">
             <div style='display: flex; gap: 10px; justify-content: center;'>
               <form action="/home/tasks/UpdateTask" method="POST">
