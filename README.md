@@ -35,7 +35,7 @@ Progress Dashboard: The application provides users with a comprehensive progress
 6. Start the development server: `python manage.py runserver`
 
 ## Usage
-The project is already live at http://3.110.102.177:8000/ .
+The project is already live at http://16.170.227.217:8000/ .
 You create your own account or if you want to login using a dummy account, here are the credentials:- username- Emma Martinez , password- Martinez@123, mail_id- Emma.Martinez@example.com
 Also if you want to run it locally, just navigate to the project directory and run a command: python manage.py runserver .
 Then you can follow the following steps:-
